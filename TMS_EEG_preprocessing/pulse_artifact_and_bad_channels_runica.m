@@ -77,6 +77,16 @@ for site=sites
             bad_epochs_noisemasking = 286:287;
             epoch_inds = get_epoch_inds_good(EEG_and_EMG_epoched,bad_epochs_noisemasking);
         end
+        %{
+        %optimally someting like this should exist here if get_epoch_inds_good was used for no noise masking trials so that the next step does not overwrite epoch_inds
+        %however, we did not observe that the condition if length(uniq_events) ~= length([EEG_and_EMG_epoched.event.urevent]) | length(unique([EEG_and_EMG_epoched.event.epoch])) ~= length([EEG_and_EMG_epoched.event.epoch])
+        %was fulfilled with the subjects that had no noise masking trials
+        if bad_noises
+            EEG_merged  = pop_select(EEG_and_EMG_epoched, 'trial',epoch_inds);
+            n_epochs = size(EEG_and_EMG_epoched.data,3);
+            epoch_inds = 1:n_epochs;
+        end
+        %}
         length(epoch_inds)
         uniq_events = unique([EEG_and_EMG_epoched.event.urevent]);
         if length(uniq_events) ~= length([EEG_and_EMG_epoched.event.urevent]) | length(unique([EEG_and_EMG_epoched.event.epoch])) ~= length([EEG_and_EMG_epoched.event.epoch])
