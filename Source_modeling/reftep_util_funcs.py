@@ -39,7 +39,7 @@ def lsq_dipole(forward, evoked, tmin=None, tmax=None):
             pickcol = L[:,dipole_start_index:dipole_start_index+3]#picked triplet here
             free_orientation_stc_now = np.matmul(np.linalg.pinv(pickcol),y_measured) #q_hat = pinv(L)y
             y_predicted = np.matmul(pickcol,free_orientation_stc_now) #y_hat = Lq_hat
-            exp_var_new = sklearn.metrics.explained_variance_score(y_measured, y_predicted) #r squared between y and y_hat
+            exp_var_new = sklearn.metrics.explained_variance_score(y_measured, y_predicted) #expvar between y and y_hat
             if exp_var_new > exp_var: #if the best explained variance was exceeded, then save the dipole info as the best one
                 exp_var = exp_var_new #best new expvar
                 #update best position
@@ -89,7 +89,7 @@ def lsq_dipole_to_pos(forward, evoked, tmin, tmax, pos_ind, n_times, ori_fixed=N
             amplitude = np.matmul(np.linalg.pinv(pickcol_projected),y_measured)[0] #amplitude of the fixed source
             orientation_stc_now = ori_fixed*amplitude #the source strengths in all dimensions
         y_predicted = np.matmul(pickcol,orientation_stc_now) #y_hat = Lq_hat
-        exp_var_new = sklearn.metrics.explained_variance_score(y_measured, y_predicted) #r squared between y and y_hat
+        exp_var_new = sklearn.metrics.explained_variance_score(y_measured, y_predicted) #expvar between y and y_hat
         if exp_var_new > exp_var: #if the best explained variance was exceeded, then save the dipole info as the best one
             exp_var = exp_var_new
             best_topo = y_predicted
